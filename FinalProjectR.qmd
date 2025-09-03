@@ -5,6 +5,7 @@ format:
     theme: yeti
 editor: visual
 echo: false
+
 ---
 
 
@@ -53,11 +54,35 @@ There were `r stats$n` users with a mean order frequency of `r stats$mean_orderf
 
 
 ```{r}
+#| label: tbl-regression
+#| tbl-cap : "Regression Model" 
+regression_table <- tbl_uvregression(
+	orders,
+	y = price, 
+	include = c(
+		gender, restaurant_name, dish_name, category, payment_method, delivery_status, order_frequency
+	),
+	method = lm
+)
 
+regression_table
+inline_text(regression_table, variable = "order_frequency")
 ```
 
 
 ```{r}
-
+#| label: fig-price
+#| fig-cap: "Distribution of Price by Food Category"
+figure <- ggplot(orders, 
+						aes(x = category, 
+								y = price, fill = category)) +
+	theme_minimal() +
+	geom_boxplot() +
+	labs(x = "Food category",
+			 y = "Price",
+			 )
+figure
 ```
 
+
+See @tbl-regression and @fig-price for more information about prices
