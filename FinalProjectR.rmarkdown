@@ -16,7 +16,7 @@ library(gtsummary)
 library(ggplot2)
 
 #Read in a dataset and save a file (can be data, table, figure, etc.):
-orders <- read_csv(here((here::here("data", "Food.csv"))))
+orders <- read_csv(here((here::here("/Users/suzain/Downloads/Food.csv"))))
 ```
 
 This analysis used data from Kaggle on Food Panda orders in Pakistan, containing `r nrow(orders)` rows and `r ncol(orders)` columns. The dataset includes information on customer demographics, order details, and transaction characteristics. The source is an open-access Kaggle dataset: Foodpanda Analysis Dataset 2025.
@@ -97,3 +97,4 @@ avg_price(orders, "gender")
 ```
 
 See @tbl-regression and @fig-price for more information about prices
+
