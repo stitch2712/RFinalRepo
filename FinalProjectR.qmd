@@ -5,19 +5,20 @@ format:
     theme: yeti
 editor: visual
 echo: false
-
 ---
 
-
 ```{r}
+#Loading all necessary packages:
 library(here)
 library(readr)
 library(dplyr)
 library(gtsummary)
 library(ggplot2)
 
+#Read in a dataset and save a file (can be data, table, figure, etc.):
 orders <- read_csv(here((here::here("/Users/suzain/Downloads/Food.csv"))))
 ```
+
 This analysis used data from Kaggle on Food Panda orders in Pakistan, containing `r nrow(orders)` rows and `r ncol(orders)` columns. The dataset includes information on customer demographics, order details, and transaction characteristics. The source is an open-access Kaggle dataset: Foodpanda Analysis Dataset 2025.
 
 ```{r}
@@ -47,11 +48,9 @@ stats <- list(n = nrow(orders),
 							mean_orderfrequency = mean(orders$order_frequency))
 
 
-
 ```
+
 There were `r stats$n` users with a mean order frequency of `r stats$mean_orderfrequency`
-
-
 
 ```{r}
 #| label: tbl-regression
@@ -62,13 +61,19 @@ regression_table <- tbl_uvregression(
 	include = c(
 		gender, restaurant_name, dish_name, category, payment_method, delivery_status, order_frequency
 	),
-	method = lm
-)
+	method = lm, label = list(
+	gender ~ "Gender",
+	restaurant_name ~ "Restaurant Name",
+	dish_name ~ "Name of the Dish",
+	category ~ "Category",
+	payment_method ~ "Payment Method",
+	delivery_status ~ "Delivery Status"
+	)
+) 
 
 regression_table
 inline_text(regression_table, variable = "order_frequency")
 ```
-
 
 ```{r}
 #| label: fig-price
@@ -82,7 +87,13 @@ figure <- ggplot(orders,
 			 y = "Price",
 			 )
 figure
+ggsave(here::here("outputs", "boxplot.png"), figure, width = 7, height = 5)
 ```
-
+```{r}
+avg_price <- function(df, group_var) {
+	tapply(df$price, df[[group_var]], mean, na.rm = TRUE)
+}
+avg_price(orders, "gender")
+```
 
 See @tbl-regression and @fig-price for more information about prices
